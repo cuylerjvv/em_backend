@@ -15,7 +15,10 @@ const app = express();
 app.use(bodyParser.json());
 
 // If you use cors, In my instance I did not need to set headers
-app.use(cors());
+const corsOptions = {
+    origin: 'https://deft-daifuku-f8698c.netlify.app',
+};
+app.use(cors(corsOptions));
 // app.use((req, res, next) => {
 //     res.setHeader('Access-Control-Allow-Origin', '*');
 //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -48,9 +51,9 @@ app.use('/:location/employees', (req, res, next) => {
     console.log(location);
     req.location = location;
     next();
-  }, employeesRoute);
+}, employeesRoute);
 
-  app.use('/:location/shiftlist/create', (req, res, next) => {
+app.use('/:location/shiftlist/create', (req, res, next) => {
     const location = req.params.location;
     req.location = location;
     next();
@@ -59,7 +62,7 @@ app.use('/:location/employees', (req, res, next) => {
 Promise.all([databaseConnections.dixie, databaseConnections.gazelle])
     .then(() => {
         app.listen(process.env.PORT || 5000, () => {
-        console.log('Server is running on http://localhost:5000');
+            console.log('Server is running');
         });
     })
     .catch(err => {
